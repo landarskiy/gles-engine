@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Корневой эелемент. Без атрибутов. -->
+<beans>
+
+    <!-- Описание бина.
+    Атрибут category:
+        object - будет создан бин-экземпляр класса (по умолч.);
+        class - будет создан бин, работающий со статич. методами, загруженного через Class.forName;
+        template - бин создан не будет, но в конифгурации далее на это можно ссылаться через атрибут parent.
+    Атрибут scope:
+        prototype - каждый раз при запросе такого бина у контейнера или при ссылке на него из методов и констуркторов других бинов создается новый экземпляр;
+        singleton - бин создается только при первом обращении/ссылке (по умолч.).  
+     -->
+    <bean name="base" type="java.lang.String" category="template" scope="prototype" >
+        <!-- Описывает технику создания бина. Здесь это конструктор. -->
+        <construction>
+            <!-- Аргументы конструктора. -->
+            <argument value="managed string" />
+        </construction>
+    </bean>
+    
+    <bean name="test" parent="base" >
+    </bean>
+    
+    <bean name="test3" parent="test">
+        <construction>
+            <argument value="another string" />
+        </construction>
+    </bean>
+    
+    <bean name="list" type="java.util.ArrayList" category="template" >
+    </bean>
+    
+    <bean name="factory" type="org.bananaLaba.ioc.test.ContainerLoaderTest$Factory" category="class" >
+        <injection method="init">
+            <argument value="457" type="int" />
+        </injection>
+    </bean>
+    
+    <bean name="test2" type="org.bananaLaba.ioc.test.ContainerLoaderTest$ContainedBean" scope="singleton" >
+        <construction factoryBean="factory" factoryMethod="create" />
+        <injection method="setValue">
+            <argument beanName="test" >
+            </argument>
+        </injection>
+        <injection method="setList">
+            <argument typeHint="java.util.List">
+                <bean parent="list">
+                    <injection method="add">
+                        <argument value="string1" />
+                    </injection>
+                    <injection method="add">
+                        <argument>
+                            <bean parent="base"></bean>
+                        </argument>
+                    </injection>
+                    <injection method="add">
+                        <argument beanName="test3" />
+                    </injection>
+                </bean>
+            </argument>
+        </injection>
+    </bean>
+
+</beans>

@@ -1,0 +1,2 @@
+5) Add Ant script.
+6) Write automated tests with JUnit (when it will go up to Android see http://developer.android.com/tools/testing/testing_android.html). 

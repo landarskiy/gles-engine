@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<space:entity xmlns:space="org.bananaLaba.namespace" attribute="test value">
+    <space:child a="13" b="3.14" />
+    <space:entity attribute="second string" />
+</space:entity>

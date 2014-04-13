@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<processor rootName="tasks" rootId="root">
+
+    <scenario id="print">
+        <call bean="action" method="print">
+            <argument type="java.lang.Float" attribute="value" />
+        </call>
+    </scenario>
+    
+    <scenario id="printConstant">
+        <call bean="action" method="print">
+            <argument type="java.lang.Float" constant="MAX_VALUE" />
+        </call>
+    </scenario>
+
+    <scenario id="add">
+        <call bean="action" method="add">
+            <argument type="float" attribute="a" />
+            <argument type="float" attribute="b" />
+        </call>
+    </scenario>
+
+    <scenario id="project">
+        <call bean="action" method="print">
+            <argument type="org.bananaLaba.fdp.test.FDPBootstrapTest$Tuple" typeHint="java.lang.Object">
+                <projection attribute="a" property="a" />
+                <projection attribute="b" property="b" />
+            </argument>
+        </call>
+    </scenario>
+
+    <scenario id="store">
+        <store key="value">
+            <argument attribute="value" type="int" />
+        </store>
+    </scenario>
+    
+    <scenario id="storeComplex">
+        <store key="value">
+            <argument type="org.bananaLaba.fdp.test.FDPBootstrapTest$Tuple" typeHint="java.lang.Object">
+                <projection attribute="a" property="a" />
+                <projection attribute="b" property="b" />
+            </argument>
+        </store>
+    </scenario>
+
+    <scenario id="retrieve">
+        <call bean="action" method="print">
+            <argument storeKey="value" />
+        </call>
+    </scenario>
+    
+    <tag name="print" scenarioId="print" extends="root" />
+    <tag name="add" scenarioId="add" />
+    <tag name="project" scenarioId="project" />
+    <tag name="store" scenarioId="store" />
+    <tag name="storeComplex" scenarioId="storeComplex" />
+    <tag name="retrieve" scenarioId="retrieve" />
+    <tag name="printConstant" scenarioId="printConstant" />
+
+</processor>

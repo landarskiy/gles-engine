@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tasks>
+
+    <print value="3.14" >
+        <print value="9.81" />
+    </print>
+    <add a="5" b="4" />
+    <project a="345" b="45.7945f" />
+    <store value="999" />
+    <retrieve />
+    <storeComplex a="11" b="12" />
+    <retrieve />
+    <printConstant />
+
+</tasks>
