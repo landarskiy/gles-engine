@@ -8,6 +8,7 @@ import org.bananaLaba.fdp.BeanCallBuilder;
 import org.bananaLaba.fdp.scenario.ArgumentSpecification;
 import org.bananaLaba.fdp.scenario.AttributeArgumentSpecification;
 import org.bananaLaba.fdp.scenario.CallActionSpecification;
+import org.bananaLaba.fdp.scenario.ClassConstantSpecification;
 import org.bananaLaba.fdp.scenario.CompositeAttributeArgumentSpecification;
 import org.bananaLaba.fdp.scenario.ContextReferenceType;
 import org.bananaLaba.fdp.scenario.ReferenceArgumentSpecification;
@@ -81,6 +82,20 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
 
         specification.setTypeHint(typeHint == null ? value.getClass() : typeHint);
         specification.setValue(value);
+
+        this.argumentSpecifications.add(specification);
+    }
+
+    @Override
+    public void addClassConstantArgument(final Class<?> sourceType, final String name, final Class<?> typeHint) {
+        final ClassConstantSpecification specification = new ClassConstantSpecification();
+        if (typeHint == null) {
+            throw new IllegalArgumentException("Class constants must have type hint!");
+        }
+
+        specification.setTypeHint(typeHint);
+        specification.setConstantName(name);
+        specification.setSourceType(sourceType);
 
         this.argumentSpecifications.add(specification);
     }

@@ -10,7 +10,7 @@
     
     <scenario id="printConstant">
         <call bean="action" method="print">
-            <argument type="java.lang.Float" constant="MAX_VALUE" />
+            <argument type="java.lang.Float" constantAttribute="constant" typeHint="float" />
         </call>
     </scenario>
 

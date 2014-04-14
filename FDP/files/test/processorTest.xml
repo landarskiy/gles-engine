@@ -11,6 +11,6 @@
     <retrieve />
     <storeComplex a="11" b="12" />
     <retrieve />
-    <printConstant />
+    <printConstant constant="MIN_VALUE" />
 
 </tasks>

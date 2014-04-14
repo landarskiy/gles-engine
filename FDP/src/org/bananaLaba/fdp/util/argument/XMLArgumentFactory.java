@@ -4,6 +4,7 @@ import org.bananaLaba.bootstrap.common.BaseStandardFactory;
 import org.bananaLaba.fdp.mapping.XMLProcessorArgument;
 import org.bananaLaba.fdp.scenario.ArgumentSpecification;
 import org.bananaLaba.fdp.scenario.AttributeArgumentSpecification;
+import org.bananaLaba.fdp.scenario.ClassConstantSpecification;
 import org.bananaLaba.fdp.scenario.CompositeAttributeArgumentSpecification;
 import org.bananaLaba.fdp.scenario.ReferenceArgumentSpecification;
 import org.bananaLaba.fdp.scenario.StaticArgumentSpecification;
@@ -17,6 +18,7 @@ public class XMLArgumentFactory extends BaseStandardFactory<ArgumentSpecificatio
         this.bindBuilder(AttributeArgumentSpecification.class, new AttributeArgumentBuilder());
         this.bindBuilder(CompositeAttributeArgumentSpecification.class, new CompositeAttributeArgumentBuilder());
         this.bindBuilder(StaticArgumentSpecification.class, new StaticArgumentBuilder());
+        this.bindBuilder(ClassConstantSpecification.class, new ClassConstantArgumentBuilder());
     }
 
     public static XMLArgumentFactory getInstance() {

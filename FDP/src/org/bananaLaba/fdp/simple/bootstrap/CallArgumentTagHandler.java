@@ -39,8 +39,13 @@ public class CallArgumentTagHandler extends ArgumentTagHandler {
     }
 
     @Override
-    protected void commitSimpleValue(final Object value, final Class<?> typeHint) {
+    protected void commitStaticValue(final Object value, final Class<?> typeHint) {
         this.builder.addStaticArgument(value, typeHint);
+    }
+
+    @Override
+    protected void commitClassConstant(final Class<?> sourceType, final String name, final Class<?> typeHint) {
+        this.builder.addClassConstantArgument(sourceType, name, typeHint);
     }
 
 }

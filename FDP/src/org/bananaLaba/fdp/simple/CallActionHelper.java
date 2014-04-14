@@ -9,6 +9,8 @@ import org.bananaLaba.fdp.mapping.XMLProcessorArgument;
 import org.bananaLaba.ioc.BeanContainer;
 import org.bananaLaba.ioc.reflection.Injector;
 
+// TODO: modify scenario class hierarchy so e.g. call action helper could update the target method argument type hints
+// and re-bind it if necessary (this will remove mandatory type hint from class constant arguments).
 public class CallActionHelper implements ActionHelper {
 
     private List<XMLProcessorArgument<?>> arguments = new ArrayList<>();

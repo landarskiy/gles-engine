@@ -19,6 +19,8 @@ public interface BeanCallBuilder {
 
     void addStaticArgument(final Object value, final Class<?> typeHint);
 
+    void addClassConstantArgument(final Class<?> sourceType, final String name, final Class<?> typeHint);
+
     void addStoreArgument(final String key, final Class<?> typeHint);
 
     void addStoreArgument(final String key);

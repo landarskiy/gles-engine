@@ -44,9 +44,15 @@ public class StoreArgumentTagHandler extends ArgumentTagHandler {
     }
 
     @Override
-    protected void commitSimpleValue(final Object value, final Class<?> typeHint) {
-        // FIXME: review this question with the feature of duplicating stored values.
+    protected void commitStaticValue(final Object value, final Class<?> typeHint) {
+        // FIXME: review this question with storing static values.
         throw new RuntimeException("A simple value cannot be stored!");
+    }
+
+    @Override
+    protected void commitClassConstant(final Class<?> sourceType, final String name, final Class<?> typeHint) {
+        // FIXME: review this question with storing class constants.
+        throw new RuntimeException("A class constant cannot be stored!");
     }
 
 }

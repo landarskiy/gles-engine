@@ -23,8 +23,12 @@ public class FDPBootstrapTest {
 
     public static class Action {
 
-        public void print(final Object tuple) {
-            System.out.println(tuple);
+        public void print(final Object object) {
+            System.out.println(object);
+        }
+
+        public void print(final float object) {
+            System.out.println(object);
         }
 
         public void add(final float a, final float b) {
