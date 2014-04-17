@@ -28,4 +28,8 @@ public class BeanTagHandler extends BaseBeanTagHandler {
         return true;
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

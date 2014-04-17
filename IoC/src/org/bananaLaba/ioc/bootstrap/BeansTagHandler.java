@@ -35,4 +35,8 @@ public class BeansTagHandler implements ExtendedTagHandler {
         context.setGlobal(BeansTagHandler.USED_CLASS_BEAN_TYPES, this.usedClassBeanTypes);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

@@ -63,4 +63,8 @@ public class InjectionTagHandler implements ExtendedTagHandler {
         context.propagateAttributeDown(ArgumentStore.OBJECT_ARGUMENT_STORE, this.store);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

@@ -60,9 +60,13 @@ public class ConstructionTagHandler implements ExtendedTagHandler {
 
     @Override
     public void setContext(final TagContext context) {
-        this.builder = context.getPropagatedAttribute(BeanTagHandler.SHARED_BUILDER, ObjectBeanBuilder.class);
+        this.builder = context.getPropagatedAttribute(BaseBeanTagHandler.SHARED_BUILDER, ObjectBeanBuilder.class);
         this.store = new SimpleArgumentStore();
         context.propagateAttributeDown(ArgumentStore.OBJECT_ARGUMENT_STORE, this.store);
+    }
+
+    @Override
+    public void handleCharacterData(final String data) {
     }
 
 }

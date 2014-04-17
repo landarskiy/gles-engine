@@ -109,4 +109,8 @@ public class ArgumentTagHandler implements ExtendedTagHandler {
         this.store = this.context.getPropagatedAttribute(ArgumentStore.OBJECT_ARGUMENT_STORE, ArgumentStore.class);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

@@ -57,4 +57,8 @@ public class AnonymousBeanTagHandler extends BaseBeanTagHandler {
         this.store.addReference(argument);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }
