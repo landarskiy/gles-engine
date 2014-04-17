@@ -23,8 +23,7 @@ import org.bananaLaba.ioc.BeanContainer;
 
 // TODO: add support for default attribute values.
 // TODO: add support for conditionals that deliver the feature of dynamic attribute value-dependent action choice.
-// TODO: add nested scenario support to ease alternate tag-to-action mapping for different nesting configurations of
-// the same tags. Also beans called within these nested scenarios should be able to have child-parent communications.
+// TODO: beans called within nested scenarios should be able to have child-parent communications.
 public class SimpleSAXProcessor implements XMLProcessor {
 
     private BeanContainer container;
@@ -87,7 +86,10 @@ public class SimpleSAXProcessor implements XMLProcessor {
                         public ExtendedTagHandler create() {
                             final ScenarioTagHandler handler = new ScenarioTagHandler();
                             handler.setScenarioContext(SimpleSAXProcessor.this.context);
-                            handler.setScenarioId(value.getScenarioId());
+                            handler.setOpenScenarioId(value.getOpenScenarioId());
+                            handler.setCharacterDataAttributeName(value.getCharacterDataAttributeName());
+                            handler.setCharacterScenarioId(value.getCharacterDataScenarioId());
+                            handler.setCloseScenarioId(value.getCloseScenarioId());
 
                             return handler;
                         }

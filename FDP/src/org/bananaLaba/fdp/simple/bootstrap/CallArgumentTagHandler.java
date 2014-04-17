@@ -48,4 +48,8 @@ public class CallArgumentTagHandler extends ArgumentTagHandler {
         this.builder.addClassConstantArgument(sourceType, name, typeHint);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

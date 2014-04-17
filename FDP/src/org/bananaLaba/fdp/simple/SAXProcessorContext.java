@@ -54,6 +54,11 @@ public class SAXProcessorContext implements XMLProcessorContext, ScenarioContext
     @Override
     public void execute(final String id) {
         final List<ActionHelper> helpers = this.helperMap.get(id);
+        if (helpers == null) {
+            // TODO: throw a custom exception here.
+            throw new IllegalArgumentException("The \"" + id + "\" scenario is not registered!");
+        }
+
         for (final ActionHelper helper : helpers) {
             helper.call();
         }

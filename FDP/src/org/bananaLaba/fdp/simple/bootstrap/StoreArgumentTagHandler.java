@@ -55,4 +55,8 @@ public class StoreArgumentTagHandler extends ArgumentTagHandler {
         throw new RuntimeException("A class constant cannot be stored!");
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

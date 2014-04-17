@@ -42,4 +42,8 @@ public class ScenarioTagHandler implements ExtendedTagHandler {
     public void setContext(final TagContext context) {
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

@@ -25,4 +25,8 @@ public class StoreTagHandler implements ExtendedTagHandler {
         this.context = context;
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

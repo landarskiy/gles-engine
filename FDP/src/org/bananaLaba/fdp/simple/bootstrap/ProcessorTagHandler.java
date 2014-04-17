@@ -64,4 +64,8 @@ public class ProcessorTagHandler implements ExtendedTagHandler {
         context.propagateAttributeDown(ProcessorTagHandler.PARENT_TAG_NODE, this.tagStructure);
     }
 
+    @Override
+    public void handleCharacterData(final String data) {
+    }
+
 }

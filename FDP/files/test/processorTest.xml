@@ -12,5 +12,9 @@
     <storeComplex a="11" b="12" />
     <retrieve />
     <printConstant constant="MIN_VALUE" />
+    <cdata att="Hello">
+        Test data
+    </cdata>
+    <openClose openMessage="Hi!" closeMessage="Bye!" />
 
 </tasks>
