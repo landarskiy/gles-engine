@@ -15,6 +15,10 @@ public interface TagHandler extends TagLogics {
         public void close() {
         }
 
+        @Override
+        public void handleCharacterData(final String data) {
+        }
+
     };
 
     void close();

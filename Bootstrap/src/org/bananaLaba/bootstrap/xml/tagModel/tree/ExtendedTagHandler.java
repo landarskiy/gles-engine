@@ -19,6 +19,10 @@ public interface ExtendedTagHandler extends TagHandler {
         public void setContext(final TagContext context) {
         }
 
+        @Override
+        public void handleCharacterData(final String data) {
+        }
+
     };
 
     void setContext(final TagContext context);

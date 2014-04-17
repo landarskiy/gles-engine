@@ -30,11 +30,13 @@ public class BootstrapProcessor {
         try {
             this.parser.parse(xmlStream, new DefaultHandler() {
 
+                private TagLogics currentLogics;
+
                 @Override
                 public void startElement(final String uri, final String localName,
                     final String qName, final Attributes atts) throws SAXException {
-                    final TagLogics logics = modelIterator.enterTag(uri, localName);
-                    logics.handle(new AttributeMap() {
+                    this.currentLogics = modelIterator.enterTag(uri, localName);
+                    this.currentLogics.handle(new AttributeMap() {
 
                         @Override
                         public String getAttribute(final String name) {
@@ -57,6 +59,7 @@ public class BootstrapProcessor {
                 @Override
                 public void endElement(final String uri, final String localName,
                     final String qName) throws SAXException {
+                    this.currentLogics = null;
                     modelIterator.leaveTag();
                 }
 
@@ -69,6 +72,13 @@ public class BootstrapProcessor {
                 @Override
                 public void endPrefixMapping(final String prefix) throws SAXException {
                     modelIterator.leaveNamespace(prefix);
+                }
+
+                @Override
+                public void characters(final char[] data, final int offset, final int length) {
+                    if (this.currentLogics != null) {
+                        this.currentLogics.handleCharacterData(new String(data, offset, length));
+                    }
                 }
 
             });
