@@ -20,6 +20,7 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
 
     private String beanName;
     private String methodName;
+    private ContextReferenceType source;
     private boolean skippable;
 
     @Override
@@ -111,8 +112,9 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
     }
 
     @Override
-    public void setBeanName(final String name) {
+    public void setBean(final String name, final ContextReferenceType source) {
         this.beanName = name;
+        this.source = source;
     }
 
     @Override
@@ -135,6 +137,7 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
         final CallActionSpecification callSpecification = new CallActionSpecification();
         callSpecification.setSkippable(this.skippable);
         callSpecification.setTargetId(this.beanName);
+        callSpecification.setReferenceType(this.source);
         callSpecification.setMethodName(this.methodName);
         callSpecification.addArguments(new ArrayList<>(this.argumentSpecifications));
 

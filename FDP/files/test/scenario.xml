@@ -61,13 +61,16 @@
     </scenario>
     
     <scenario id="open">
-        <call bean="action" method="print">
+        <store key="storedBean">
+            <argument beanName="action" />
+        </store>
+        <call storeKey="storedBean" method="print">
             <argument attribute="openMessage" />
         </call>
     </scenario>
     
     <scenario id="close">
-        <call bean="action" method="print">
+        <call storeKey="storedBean" method="print">
             <argument attribute="closeMessage" />
         </call>
     </scenario>

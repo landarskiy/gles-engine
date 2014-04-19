@@ -6,6 +6,7 @@ import java.util.List;
 import org.bananaLaba.fdp.XMLProcessorContext;
 import org.bananaLaba.fdp.mapping.ValueSource;
 import org.bananaLaba.fdp.mapping.XMLProcessorArgument;
+import org.bananaLaba.fdp.scenario.ContextReferenceType;
 import org.bananaLaba.ioc.BeanContainer;
 import org.bananaLaba.ioc.reflection.Injector;
 
@@ -19,6 +20,7 @@ public class CallActionHelper implements ActionHelper {
     private BeanContainer container;
     private XMLProcessorContext context;
     private boolean callSkippable;
+    private ContextReferenceType referenceType;
 
     public void addArgument(final XMLProcessorArgument<?> argument) {
         if (this.context != null) {
@@ -40,6 +42,14 @@ public class CallActionHelper implements ActionHelper {
         this.callSkippable = skippable;
     }
 
+    public void setReferenceType(final ContextReferenceType referenceType) {
+        if (referenceType == null) {
+            throw new IllegalArgumentException("Expected a not-null reference type for a call action!");
+        }
+
+        this.referenceType = referenceType;
+    }
+
     public BeanContainer getBeanContainer() {
         return this.container;
     }
@@ -58,7 +68,12 @@ public class CallActionHelper implements ActionHelper {
             }
         }
 
-        final Object bean = this.container.getBean(this.beanName, Object.class);
+        Object bean = null;
+        if (this.referenceType == ContextReferenceType.BEAN) {
+            bean = this.container.getBean(this.beanName, Object.class);
+        } else if (this.referenceType == ContextReferenceType.STORE) {
+            bean = this.context.getTransientStore().getBean(this.beanName, Object.class);
+        }
         final int argumentCount = this.arguments.size();
         final Object[] argumentValues = new Object[argumentCount];
         for (int i = 0; i < argumentCount; i++) {

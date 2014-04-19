@@ -11,6 +11,7 @@ import org.bananaLaba.fdp.TagSpecification;
 import org.bananaLaba.fdp.scenario.AttributeArgumentSpecification;
 import org.bananaLaba.fdp.scenario.CallActionSpecification;
 import org.bananaLaba.fdp.scenario.CompositeAttributeArgumentSpecification;
+import org.bananaLaba.fdp.scenario.ContextReferenceType;
 import org.bananaLaba.fdp.simple.ActionHelper;
 import org.bananaLaba.fdp.simple.SimpleSAXProcessor;
 import org.bananaLaba.fdp.util.action.ActionHelperFactory;
@@ -37,6 +38,7 @@ public class SimpleSAXProcessorTest {
 
         CallActionSpecification callSpecification = new CallActionSpecification();
         callSpecification.setTargetId("listener");
+        callSpecification.setReferenceType(ContextReferenceType.BEAN);
         callSpecification.setMethodName("onTag");
 
         final AttributeArgumentSpecification projectionSpecification = new AttributeArgumentSpecification();
@@ -52,6 +54,7 @@ public class SimpleSAXProcessorTest {
 
         callSpecification = new CallActionSpecification();
         callSpecification.setTargetId("listener");
+        callSpecification.setReferenceType(ContextReferenceType.BEAN);
         callSpecification.setMethodName("onChildTag");
 
         final CompositeAttributeArgumentSpecification compositeSpecification =

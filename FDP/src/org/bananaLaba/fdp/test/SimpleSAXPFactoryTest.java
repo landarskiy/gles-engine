@@ -12,6 +12,7 @@ import org.bananaLaba.fdp.QualifiedName;
 import org.bananaLaba.fdp.ScenarioBuilder;
 import org.bananaLaba.fdp.TagSpecification;
 import org.bananaLaba.fdp.XMLProcessor;
+import org.bananaLaba.fdp.scenario.ContextReferenceType;
 import org.bananaLaba.fdp.simple.SimpleSAXPFactory;
 import org.bananaLaba.fdp.test.SimpleSAXProcessorTest.DataBean;
 import org.bananaLaba.fdp.test.SimpleSAXProcessorTest.ListenerBean;
@@ -38,7 +39,7 @@ public class SimpleSAXPFactoryTest {
         scenarioBuilder.setId("entity");
         final BeanCallBuilder callBuilder = scenarioBuilder.getBeanCallBuilder();
         callBuilder.addSimpleArgument("attribute", String.class);
-        callBuilder.setBeanName("listener");
+        callBuilder.setBean("listener", ContextReferenceType.BEAN);
         callBuilder.setMethodName("onTag");
         callBuilder.commit();
         scenarioBuilder.commit();

@@ -26,6 +26,7 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
         final CallActionHelper helper = new CallActionHelper();
         helper.setBeanName(specification.getTargetId());
         helper.setCallSkippable(specification.isSkippable());
+        helper.setReferenceType(specification.getReferenceType());
 
         final XMLArgumentFactory factory = XMLArgumentFactory.getInstance();
         final List<ArgumentSpecification> argumentSpecifications = specification.getArguments();

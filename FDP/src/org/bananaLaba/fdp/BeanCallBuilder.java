@@ -2,6 +2,8 @@ package org.bananaLaba.fdp;
 
 import java.util.Map;
 
+import org.bananaLaba.fdp.scenario.ContextReferenceType;
+
 public interface BeanCallBuilder {
 
     void addSimpleArgument(final String attributeName, final Class<?> type);
@@ -25,7 +27,7 @@ public interface BeanCallBuilder {
 
     void addStoreArgument(final String key);
 
-    void setBeanName(final String name);
+    void setBean(final String name, final ContextReferenceType source);
 
     void setMethodName(final String name);
 
