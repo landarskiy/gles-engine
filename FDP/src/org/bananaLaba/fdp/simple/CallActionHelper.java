@@ -8,15 +8,15 @@ import org.bananaLaba.fdp.mapping.ValueSource;
 import org.bananaLaba.fdp.mapping.XMLProcessorArgument;
 import org.bananaLaba.fdp.scenario.ContextReferenceType;
 import org.bananaLaba.ioc.BeanContainer;
-import org.bananaLaba.ioc.reflection.Injector;
 
 // TODO: modify scenario class hierarchy so e.g. call action helper could update the target method argument type hints
 // and re-bind it if necessary (this will remove mandatory type hint from class constant arguments).
 public class CallActionHelper implements ActionHelper {
 
     private List<XMLProcessorArgument<?>> arguments = new ArrayList<>();
-    private Injector<Object> injector;
+    private MethodCall<Object> methodCall;
     private String beanName;
+    private String resultKey;
     private BeanContainer container;
     private XMLProcessorContext context;
     private boolean callSkippable;
@@ -30,12 +30,20 @@ public class CallActionHelper implements ActionHelper {
         this.arguments.add(argument);
     }
 
-    public void setInjector(final Injector<Object> injector) {
-        this.injector = injector;
+    public void setMethodCall(final MethodCall<Object> injector) {
+        this.methodCall = injector;
     }
 
     public void setBeanName(final String name) {
         this.beanName = name;
+    }
+
+    public String getResultKey() {
+        return this.resultKey;
+    }
+
+    public void setResultKey(final String resultKey) {
+        this.resultKey = resultKey;
     }
 
     public void setCallSkippable(final boolean skippable) {
@@ -80,7 +88,10 @@ public class CallActionHelper implements ActionHelper {
             argumentValues[i] = this.arguments.get(i).getValue();
         }
 
-        this.injector.apply(bean, argumentValues);
+        final Object result = this.methodCall.perform(bean, argumentValues);
+        if (this.resultKey != null) {
+            this.context.getTransientStore().put(this.resultKey, result);
+        }
     }
 
     @Override

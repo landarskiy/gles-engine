@@ -16,7 +16,6 @@ import org.bananaLaba.fdp.simple.ActionHelper;
 import org.bananaLaba.fdp.simple.CallActionHelper;
 import org.bananaLaba.fdp.util.argument.XMLArgumentFactory;
 import org.bananaLaba.ioc.BeanContainer;
-import org.bananaLaba.ioc.simple.injectors.MethodInjector;
 import org.bananaLaba.ioc.simple.util.ReflectionUtils;
 
 public class CallActionHelperBuilder implements Builder<CallActionSpecification, ActionHelper> {
@@ -27,6 +26,7 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
         helper.setBeanName(specification.getTargetId());
         helper.setCallSkippable(specification.isSkippable());
         helper.setReferenceType(specification.getReferenceType());
+        helper.setResultKey(specification.getResultKey());
 
         final XMLArgumentFactory factory = XMLArgumentFactory.getInstance();
         final List<ArgumentSpecification> argumentSpecifications = specification.getArguments();
@@ -61,12 +61,12 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
         }
 
         final String beanMethodName = specification.getMethodName();
-        final MethodInjector<Object> injector = new MethodInjector<Object>() {
+        final ReflectiveMethodCall<Object> injector = new ReflectiveMethodCall<Object>() {
 
             private boolean initialized;
 
             @Override
-            public void apply(final Object bean, final Object... arguments) {
+            public Object perform(final Object bean, final Object... arguments) {
                 if (!this.initialized) {
                     // If some arguments for this call have not been supplied by an explicit type hint, but refer
                     // to beans managed by a container either stored in the transient store, this is the last chance to
@@ -88,11 +88,11 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
 
                     this.setMethod(ReflectionUtils.findPublicMethod(bean.getClass(), beanMethodName, argumentTypes));
                 }
-                super.apply(bean, arguments);
+                return super.perform(bean, arguments);
             }
 
         };
-        helper.setInjector(injector);
+        helper.setMethodCall(injector);
 
         return helper;
     }

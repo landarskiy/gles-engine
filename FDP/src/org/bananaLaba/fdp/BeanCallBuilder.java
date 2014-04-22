@@ -35,6 +35,8 @@ public interface BeanCallBuilder {
 
     void setSkippable(final boolean skippable);
 
+    void setResultKey(final String key);
+
     void commit();
 
 }

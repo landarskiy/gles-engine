@@ -151,8 +151,6 @@ public abstract class ArgumentTagHandler implements ExtendedTagHandler {
             final String constantAttributeName =
                     attributes.getAttribute(ArgumentTagHandler.ATTRIBUTE_CONSTANT_ATTRIBUTE);
             this.commitClassConstant(sourceType,constantAttributeName, this.typeHint);
-        } else if (this.isProjection) {
-            this.context.getChildController(null, TagConstants.TAG_PROJECTION).setMinCount(1);
         }
 
         this.typeHint = null;

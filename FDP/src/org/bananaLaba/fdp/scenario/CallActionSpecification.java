@@ -6,6 +6,7 @@ import java.util.List;
 public class CallActionSpecification extends ActionSpecification {
 
     private String methodName;
+    private String resultKey;
     private ContextReferenceType referenceType;
     private List<ArgumentSpecification> argumentSpecifications = new ArrayList<>();
 
@@ -39,6 +40,14 @@ public class CallActionSpecification extends ActionSpecification {
 
     public void setReferenceType(final ContextReferenceType referenceType) {
         this.referenceType = referenceType;
+    }
+
+    public String getResultKey() {
+        return this.resultKey;
+    }
+
+    public void setResultKey(final String resultKey) {
+        this.resultKey = resultKey;
     }
 
 }

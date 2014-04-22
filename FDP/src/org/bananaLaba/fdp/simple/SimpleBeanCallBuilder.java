@@ -20,6 +20,7 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
 
     private String beanName;
     private String methodName;
+    private String resultKey;
     private ContextReferenceType source;
     private boolean skippable;
 
@@ -31,6 +32,11 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
         specification.setAttributeName(attributeName);
 
         this.argumentSpecifications.add(specification);
+    }
+
+    @Override
+    public void setResultKey(final String key) {
+        this.resultKey = key;
     }
 
     @Override
@@ -140,6 +146,7 @@ public abstract class SimpleBeanCallBuilder implements BeanCallBuilder {
         callSpecification.setReferenceType(this.source);
         callSpecification.setMethodName(this.methodName);
         callSpecification.addArguments(new ArrayList<>(this.argumentSpecifications));
+        callSpecification.setResultKey(this.resultKey);
 
         this.commitInternal(callSpecification);
     }

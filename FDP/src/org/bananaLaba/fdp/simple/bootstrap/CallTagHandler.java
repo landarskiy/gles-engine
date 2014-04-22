@@ -11,6 +11,7 @@ public class CallTagHandler implements ExtendedTagHandler {
     private static final String ATTRIBUTE_BEAN = "bean";
     private static final String ATTRIBUTE_STORE_KEY = "storeKey";
     private static final String ATTRIBUTE_METHOD = "method";
+    private static final String ATTRIBUTE_RESULT_KEY = "resultKey";
     private static final String ATTRIBUTE_ON_MISSING_ARGUMENTS = "onMissingArguments";
 
     private BeanCallBuilder builder;
@@ -50,6 +51,12 @@ public class CallTagHandler implements ExtendedTagHandler {
         } else {
             this.builder.setSkippable(false);
         }
+
+        String resultKey = null;
+        if (attributes.isPresent(CallTagHandler.ATTRIBUTE_RESULT_KEY)) {
+           resultKey = attributes.getAttribute(CallTagHandler.ATTRIBUTE_RESULT_KEY);
+        }
+        this.builder.setResultKey(resultKey);
     }
 
     @Override
