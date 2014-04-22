@@ -28,7 +28,7 @@ public class DataBeanSource<T> extends XMLProcessorArgument<T> {
     public void addAttribute(final String originalName, final String aliasName,
             final Converter<String, Object> converter) {
         this.aliasMap.put(originalName, aliasName);
-        this.converterMap.put(originalName, converter);
+        this.converterMap.put(aliasName, converter);
     }
 
     public void addAttribute(final String name, final Converter<String, Object> converter) {
@@ -47,10 +47,10 @@ public class DataBeanSource<T> extends XMLProcessorArgument<T> {
 
         final Set<Entry<String, String>> aliasEntries = this.aliasMap.entrySet();
         for (final Entry<String, String> aliasEntry : aliasEntries) {
-            final String attributeName = aliasEntry.getKey();
+            final String attributeName = aliasEntry.getValue();
             final Object propertyValue = this.converterMap.get(attributeName)
                     .convert(this.attributeMap.getAttribute(attributeName));
-            this.beanBuilder.setProperty(aliasEntry.getValue(), propertyValue);
+            this.beanBuilder.setProperty(aliasEntry.getKey(), propertyValue);
         }
 
         return this.beanBuilder.build();

@@ -22,9 +22,9 @@ public class CompositeAttributeArgumentBuilder implements XMLArgumentBuilder<Com
 
         final Set<Entry<String, String>> propertyEntries = specification.getPropertyNameMap().entrySet();
         for (final Entry<String, String> propertyEntry : propertyEntries) {
-            final String propertyName = propertyEntry.getKey();
+            final String propertyName = propertyEntry.getValue();
             final Class<?> propertyType = reification.getPropertyType(propertyName);
-            beanArgument.addAttribute(propertyName, propertyEntry.getValue(),
+            beanArgument.addAttribute(propertyName, propertyEntry.getKey(),
                     ConversionUtils.getStringConverter(propertyType));
         }
 
