@@ -18,6 +18,7 @@ public class SimpleGraph<Id> extends AdjacencyListGraph<Id, SimpleGraphNode<Id>>
     // Methods
     // ========================================================================
     @Override
+    // TODO: it seems that this method should be swapped with the "createNode" one...
     public SimpleGraphNode<Id> getNode(final Id id) {
         return new SimpleNode(id, this.getAdjacencyList(id));
     }

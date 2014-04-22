@@ -69,14 +69,16 @@ public interface Graph<Id, Node extends GraphNode<Id>> {
     boolean hasEdges(final Id fromId, final Id totId);
 
     /**
-     * Gets an iterator for the depth-first search path from the given node.
+     * Gets an iterator for the depth-first search path from the given node. Note that the iterator will not include
+     * the start node.
      * @param startId the id of the node
      * @return the iterator
      */
     Iterator<Id> getDepthFirstIterator(final Id startId);
 
     /**
-     * Gets an iterator for the breadth-first search path from the given node.
+     * Gets an iterator for the breadth-first search path from the given node. Note that the iterator will not include
+     * the start node.
      * @param startId the id of the node
      * @return the iterator
      */

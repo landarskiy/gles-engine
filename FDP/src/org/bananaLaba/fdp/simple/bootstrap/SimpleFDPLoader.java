@@ -75,7 +75,7 @@ public class SimpleFDPLoader implements FDPLoader {
 
         });
         final StructuredTagModel tagTagModel = this.tagModel.addChild(null, TagConstants.TAG_TAG, specification);
-        tagTagModel.addChildren(tagTagModel);
+        tagTagModel.addChildren(this.tagModel);
     }
 
     @Override
