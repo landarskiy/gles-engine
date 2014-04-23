@@ -2,6 +2,7 @@ package org.bananaLaba.bootstrap.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Stack;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -30,13 +31,15 @@ public class BootstrapProcessor {
         try {
             this.parser.parse(xmlStream, new DefaultHandler() {
 
-                private TagLogics currentLogics;
+                // TODO: re-design TagLogicsIterator to completely hide separate tag handlers and their stack from
+                // BootstrapProcessor.
+                private Stack<TagLogics> logicsStack = new Stack<>();
 
                 @Override
                 public void startElement(final String uri, final String localName,
                     final String qName, final Attributes atts) throws SAXException {
-                    this.currentLogics = modelIterator.enterTag(uri, localName);
-                    this.currentLogics.handle(new AttributeMap() {
+                    final TagLogics logics = modelIterator.enterTag(uri, localName);
+                    logics.handle(new AttributeMap() {
 
                         @Override
                         public String getAttribute(final String name) {
@@ -54,12 +57,14 @@ public class BootstrapProcessor {
                         }
 
                     });
+
+                    this.logicsStack.push(logics);
                 }
 
                 @Override
                 public void endElement(final String uri, final String localName,
                     final String qName) throws SAXException {
-                    this.currentLogics = null;
+                    this.logicsStack.pop();
                     modelIterator.leaveTag();
                 }
 
@@ -76,8 +81,8 @@ public class BootstrapProcessor {
 
                 @Override
                 public void characters(final char[] data, final int offset, final int length) {
-                    if (this.currentLogics != null) {
-                        this.currentLogics.handleCharacterData(new String(data, offset, length));
+                    if (!this.logicsStack.isEmpty()) {
+                        this.logicsStack.peek().handleCharacterData(new String(data, offset, length));
                     }
                 }
 
