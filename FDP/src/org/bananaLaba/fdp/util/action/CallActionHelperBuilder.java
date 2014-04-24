@@ -1,5 +1,6 @@
 package org.bananaLaba.fdp.util.action;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +87,15 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
                         argumentTypes[typelessEntry.getKey()] = transientStore.getBeanType(typelessEntry.getValue());
                     }
 
-                    this.setMethod(ReflectionUtils.findPublicMethod(bean.getClass(), beanMethodName, argumentTypes));
+                    final Class<?> beanClass = bean.getClass();
+                    final Method method =
+                            ReflectionUtils.findPublicMethod(beanClass, beanMethodName, argumentTypes);
+                    if (method == null) {
+                        // TODO: throw a custom exception here.
+                        throw new RuntimeException("Public method \"" + beanMethodName + "\" doesn't exist in the \""
+                                + beanClass.getName() + "\" class!");
+                    }
+                    this.setMethod(method);
                 }
                 return super.perform(bean, arguments);
             }
