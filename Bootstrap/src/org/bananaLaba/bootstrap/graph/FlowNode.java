@@ -24,13 +24,6 @@ public class FlowNode<Id, C> {
         this.content = content;
     }
 
-    public FlowNode(final FlowNode<Id, C> parent, final C content) {
-        if (parent != null) {
-            parent.addChild(this);
-        }
-        this.content = content;
-    }
-
     public void addChild(final FlowNode<Id, C> child) {
         this.childMap.put(child.id, child);
     }
@@ -79,7 +72,8 @@ public class FlowNode<Id, C> {
 
     public <Id2, C2> FlowNode<Id2, C2> convert(final Converter<Id, Id2> idConverter,
             final Converter<C, C2> contentConverter) {
-        final Map<FlowNode<Id, C>, FlowNode<Id2, C2>> drilledNodes = new HashMap<>();
+        final Set<FlowNode<Id, C>> drilledNodes = new HashSet<>();
+        final Map<FlowNode<Id, C>, FlowNode<Id2, C2>> createdNodes = new HashMap<>();
 
         final Stack<FlowNode<Id, C>> sourceStack = new Stack<>();
         sourceStack.push(this);
@@ -90,23 +84,27 @@ public class FlowNode<Id, C> {
         result.setContent(contentConverter.convert(this.content));
         targetStack.push(result);
 
+        createdNodes.put(this, result);
+
         while (!sourceStack.isEmpty()) {
             final FlowNode<Id, C> currentSource = sourceStack.pop();
             final FlowNode<Id2, C2> currentTarget = targetStack.pop();
-            if (drilledNodes.containsKey(currentSource)) {
+            if (drilledNodes.contains(currentSource)) {
                 continue;
             } else {
-                drilledNodes.put(currentSource, currentTarget);
+                drilledNodes.add(currentSource);
 
                 final Collection<FlowNode<Id, C>> sourceChildren = currentSource.childMap.values();
                 for (final FlowNode<Id, C> sourceChild : sourceChildren) {
                     sourceStack.push(sourceChild);
 
-                    FlowNode<Id2, C2> targetChild = drilledNodes.get(sourceChild);
+                    FlowNode<Id2, C2> targetChild = createdNodes.get(sourceChild);
                     if (targetChild == null) {
                         targetChild = new FlowNode<>();
                         targetChild.setId(idConverter.convert(sourceChild.id));
                         targetChild.setContent(contentConverter.convert(sourceChild.content));
+
+                        createdNodes.put(sourceChild, targetChild);
                     }
 
                     currentTarget.addChild(targetChild);
