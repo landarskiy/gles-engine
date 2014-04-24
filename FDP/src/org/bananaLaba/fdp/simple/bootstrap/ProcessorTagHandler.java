@@ -2,6 +2,7 @@ package org.bananaLaba.fdp.simple.bootstrap;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bananaLaba.bootstrap.common.AttributeMap;
 import org.bananaLaba.bootstrap.graph.FlowNode;
@@ -19,6 +20,7 @@ public class ProcessorTagHandler implements ExtendedTagHandler {
     private static final String ATTRIBUTE_ROOT_ID = "rootId";
 
     public static final String SHARED_TAG_MAP = "tagMap";
+    public static final String RECURSIVE_EXTENSION_MAP = "extensionMap";
 
     public static final String PARENT_TAG_NODE = "parentNode";
 
@@ -26,6 +28,7 @@ public class ProcessorTagHandler implements ExtendedTagHandler {
     private FlowNode<QualifiedName, TagSpecification> tagStructure = new FlowNode<>();
 
     private Map<String, FlowNode<QualifiedName, TagSpecification>> tagMap = new HashMap<>();
+    private Map<FlowNode<QualifiedName, TagSpecification>, String> recuriveExtensionMap = new HashMap<>();
 
     public ProcessorTagHandler(final FDPFactory factory) {
         this.factory = factory;
@@ -33,6 +36,17 @@ public class ProcessorTagHandler implements ExtendedTagHandler {
 
     @Override
     public void close() {
+        for (final Entry<FlowNode<QualifiedName, TagSpecification>, String> extensionEntry
+                : this.recuriveExtensionMap.entrySet()) {
+            final String baseId = extensionEntry.getValue();
+            if (!this.tagMap.containsKey(baseId)) {
+                // TODO: throw a custom exception here.
+                throw new RuntimeException("Attempt to extend a missing tag with id \"" + baseId + "\"!");
+            }
+
+            extensionEntry.getKey().addChildren(this.tagMap.get(baseId).getChildMap().values());
+        }
+
         this.factory.setTagStructure(this.tagStructure);
     }
 
@@ -60,6 +74,7 @@ public class ProcessorTagHandler implements ExtendedTagHandler {
     @Override
     public void setContext(final TagContext context) {
         context.setGlobal(ProcessorTagHandler.SHARED_TAG_MAP, this.tagMap);
+        context.setGlobal(ProcessorTagHandler.RECURSIVE_EXTENSION_MAP, this.recuriveExtensionMap);
 
         context.propagateAttributeDown(ProcessorTagHandler.PARENT_TAG_NODE, this.tagStructure);
     }

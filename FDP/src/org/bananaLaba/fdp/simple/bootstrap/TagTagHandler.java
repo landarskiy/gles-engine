@@ -23,6 +23,7 @@ public class TagTagHandler implements ExtendedTagHandler {
     private static final String ATTRIBUTE_CHARACTER_SCENARIO_ID = "onCharacters";
 
     private Map<String, FlowNode<QualifiedName, TagSpecification>> tagMap;
+    private Map<FlowNode<QualifiedName, TagSpecification>, String> recuriveExtensionMap;
 
     private FlowNode<QualifiedName, TagSpecification> tagStructure = new FlowNode<>();
     private FlowNode<QualifiedName, TagSpecification> parentTagStructure;
@@ -79,11 +80,7 @@ public class TagTagHandler implements ExtendedTagHandler {
 
         if (attributes.isPresent(TagTagHandler.ATTRIBUTE_EXTENDS)) {
             final String baseId = attributes.getAttribute(TagTagHandler.ATTRIBUTE_EXTENDS);
-            if (!this.tagMap.containsKey(baseId)) {
-                // TODO: throw a custom exception here.
-                throw new RuntimeException("The base tag with id \"" + baseId + "\" is not declared earlier!");
-            }
-            this.tagStructure.addChildren(this.tagMap.get(baseId).getChildMap().values());
+            this.recuriveExtensionMap.put(this.tagStructure, baseId);
         }
 
         if (attributes.isPresent(TagTagHandler.ATTRIBUTE_ID)) {
@@ -100,6 +97,7 @@ public class TagTagHandler implements ExtendedTagHandler {
     @Override
     public void setContext(final TagContext context) {
         this.tagMap = context.getGlobal(ProcessorTagHandler.SHARED_TAG_MAP, Map.class);
+        this.recuriveExtensionMap = context.getGlobal(ProcessorTagHandler.RECURSIVE_EXTENSION_MAP, Map.class);
 
         this.parentTagStructure = context.getPropagatedAttribute(ProcessorTagHandler.PARENT_TAG_NODE, FlowNode.class);
         context.propagateAttributeDown(ProcessorTagHandler.PARENT_TAG_NODE, this.tagStructure);

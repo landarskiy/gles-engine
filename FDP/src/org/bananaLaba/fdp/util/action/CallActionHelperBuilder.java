@@ -65,9 +65,22 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
         final ReflectiveMethodCall<Object> injector = new ReflectiveMethodCall<Object>() {
 
             private boolean initialized;
+            private Class<?> methodOwnerType;
 
             @Override
             public Object perform(final Object bean, final Object... arguments) {
+                if (bean == null) {
+                    throw new IllegalArgumentException("Cannot reflectively invoke a null bean!");
+                }
+
+                final Class<?> beanType = bean.getClass();
+                if (this.initialized && (beanType != this.methodOwnerType)) {
+                    if (!this.getMethod().getDeclaringClass().isAssignableFrom(beanType)) {
+                        this.initialized = false;
+                        this.methodOwnerType = beanType;
+                    }
+                }
+
                 if (!this.initialized) {
                     // If some arguments for this call have not been supplied by an explicit type hint, but refer
                     // to beans managed by a container either stored in the transient store, this is the last chance to
@@ -87,13 +100,12 @@ public class CallActionHelperBuilder implements Builder<CallActionSpecification,
                         argumentTypes[typelessEntry.getKey()] = transientStore.getBeanType(typelessEntry.getValue());
                     }
 
-                    final Class<?> beanClass = bean.getClass();
                     final Method method =
-                            ReflectionUtils.findPublicMethod(beanClass, beanMethodName, argumentTypes);
+                            ReflectionUtils.findPublicMethod(beanType, beanMethodName, argumentTypes);
                     if (method == null) {
                         // TODO: throw a custom exception here.
                         throw new RuntimeException("Public method \"" + beanMethodName + "\" doesn't exist in the \""
-                                + beanClass.getName() + "\" class!");
+                                + beanType.getName() + "\" class!");
                     }
                     this.setMethod(method);
                 }
