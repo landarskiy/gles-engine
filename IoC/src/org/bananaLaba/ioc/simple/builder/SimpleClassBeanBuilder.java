@@ -132,6 +132,11 @@ public class SimpleClassBeanBuilder implements ClassBeanBuilder {
     }
 
     protected BeanDefinition assembleDefinition() {
+        if (this.beanType == null) {
+            throw new IllegalStateException("Invalid definition of the \"" + this.beanName
+                    + "\" bean: no type specified for it!");
+        }
+
         final BeanDefinition definition = new BeanDefinition();
 
         final BeanMetaData metaData = new BeanMetaData();
