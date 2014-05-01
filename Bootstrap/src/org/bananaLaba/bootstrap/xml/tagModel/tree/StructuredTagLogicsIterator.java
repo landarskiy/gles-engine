@@ -11,6 +11,7 @@ import org.bananaLaba.bootstrap.graph.FlowNode;
 import org.bananaLaba.bootstrap.xml.TagLogics;
 import org.bananaLaba.bootstrap.xml.TagLogicsIterator;
 
+// TODO: add feature of taf stack trace printing in exceptions to ease debugging.
 public class StructuredTagLogicsIterator implements TagLogicsIterator {
 
     private Stack<TagInstance> instanceStack = new Stack<>();
