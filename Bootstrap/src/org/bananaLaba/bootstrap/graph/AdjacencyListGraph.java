@@ -86,12 +86,12 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
     }
 
     @Override
-    public Iterator<Id> getDepthFirstIterator(final Id startId) {
+    public GraphIterator<Id> getDepthFirstIterator(final Id startId) {
         return new DepthAdjacencyListIterator(startId);
     }
 
     @Override
-    public Iterator<Id> getBreadthFirstIterator(final Id startId) {
+    public GraphIterator<Id> getBreadthFirstIterator(final Id startId) {
         return new BreadthAdjacencyListIterator(startId);
     }
 
@@ -126,7 +126,7 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
      * @author Judzin
      *
      */
-    private class DepthAdjacencyListIterator implements Iterator<Id> {
+    private class DepthAdjacencyListIterator implements GraphIterator<Id> {
 
         // ========================================================================
         // Fields
@@ -139,6 +139,8 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
          * The current adjacency list iterator.
          */
         private Iterator<Id> currentIterator;
+
+        private GraphSearchListener<Id> listener;
 
         // ========================================================================
         // Constructors
@@ -166,11 +168,19 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
                 // If it is, remember the current iterator position and get deeper.
                 this.nodeIteratorStack.push(this.currentIterator);
                 this.currentIterator = nextIterator;
+
+                if (this.listener != null) {
+                    this.listener.onDeepInto(next);
+                }
             } else {
                 // Otherwise get back while either the previous node has more unvisited connections or up to the start
                 // node.
                 while (!(this.currentIterator.hasNext() || this.nodeIteratorStack.isEmpty())) {
                     this.currentIterator = this.nodeIteratorStack.pop();
+
+                    if (this.listener != null) {
+                        this.listener.onClimbUp();
+                    }
                 }
             }
 
@@ -178,8 +188,8 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
         }
 
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
+        public void setListener(final GraphSearchListener<Id> listener) {
+            this.listener = listener;
         }
 
     }
@@ -189,7 +199,8 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
      * @author Judzin
      *
      */
-    private class BreadthAdjacencyListIterator implements Iterator<Id> {
+    // FIXME: implement listener notifications.
+    private class BreadthAdjacencyListIterator implements GraphIterator<Id> {
 
         // ========================================================================
         // Fields
@@ -202,6 +213,8 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
          * The current adjacency list iterator.
          */
         private Iterator<Id> currentIterator;
+
+        private GraphSearchListener<Id> listener;
 
         // ========================================================================
         // Constructors
@@ -223,16 +236,25 @@ public abstract class AdjacencyListGraph<Id, Node extends GraphNode<Id>> impleme
             final Id next = this.currentIterator.next();
             this.nodesToVisit.add(next);
             while (!(this.currentIterator.hasNext() || this.nodesToVisit.isEmpty())) {
+                final Id idToVisit = this.nodesToVisit.remove(0);
                 this.currentIterator =
-                        AdjacencyListGraph.this.adjacencyLists.get(this.nodesToVisit.remove(0)).iterator();
+                        AdjacencyListGraph.this.adjacencyLists.get(idToVisit).iterator();
+
+                if (this.currentIterator.hasNext()) {
+                    if (this.listener != null) {
+                        this.listener.onDeepInto(idToVisit);
+                    }
+                } else {
+                    //this.listener.
+                }
             }
 
             return next;
         }
 
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
+        public void setListener(final GraphSearchListener<Id> listener) {
+            this.listener = listener;
         }
 
     }

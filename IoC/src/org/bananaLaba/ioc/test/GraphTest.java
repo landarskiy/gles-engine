@@ -1,7 +1,6 @@
 package org.bananaLaba.ioc.test;
 
-import java.util.Iterator;
-
+import org.bananaLaba.bootstrap.graph.GraphIterator;
 import org.bananaLaba.util.SimpleGraph;
 import org.bananaLaba.util.SimpleGraphNode;
 
@@ -35,14 +34,15 @@ public class GraphTest {
         node.ensureLinkExists(9);
         node.ensureLinkExists(10);
 
-        Iterator<Integer> iterator = graph.getBreadthFirstIterator(1);
+        GraphIterator<Integer> iterator = graph.getBreadthFirstIterator(1);
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
 
         graph.getNode(4).ensureLinkBroken(7);
 
-        iterator = graph.getBreadthFirstIterator(1);
+        iterator = graph.getDepthFirstIterator(1);
+        System.out.println();
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }

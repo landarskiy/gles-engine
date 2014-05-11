@@ -13,7 +13,7 @@ public class DependencyTrackerTest {
         tracker.ensureConstructionDependency("b2", "b3");
         tracker.ensureConstructionDependency("b3", "b4");
         tracker.ensureConstructionDependency("b3", "b5");
-        //tracker.ensureConstructionDependency("b3", "b1");
+        tracker.ensureConstructionDependency("b3", "b1");
 
         final List<String> chain = tracker.getInstantiationChain("b3");
         for (final String beanName : chain) {

@@ -1,7 +1,6 @@
 package org.bananaLaba.bootstrap.graph;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * A basic interface for graph data structures.
@@ -74,7 +73,7 @@ public interface Graph<Id, Node extends GraphNode<Id>> {
      * @param startId the id of the node
      * @return the iterator
      */
-    Iterator<Id> getDepthFirstIterator(final Id startId);
+    GraphIterator<Id> getDepthFirstIterator(final Id startId);
 
     /**
      * Gets an iterator for the breadth-first search path from the given node. Note that the iterator will not include
@@ -82,6 +81,6 @@ public interface Graph<Id, Node extends GraphNode<Id>> {
      * @param startId the id of the node
      * @return the iterator
      */
-    Iterator<Id> getBreadthFirstIterator(final Id startId);
+    GraphIterator<Id> getBreadthFirstIterator(final Id startId);
 
 }

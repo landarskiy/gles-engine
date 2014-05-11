@@ -1,9 +1,9 @@
 package org.bananaLaba.util;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.bananaLaba.bootstrap.graph.AdjacencyListGraph;
+import org.bananaLaba.bootstrap.graph.GraphIterator;
 
 /**
  * A simple graph implementation based on the adjacency list representation. The graph nodes care no content except
@@ -80,12 +80,12 @@ public class SimpleGraph<Id> extends AdjacencyListGraph<Id, SimpleGraphNode<Id>>
         }
 
         @Override
-        public Iterator<Id> getDepthFirstIterator() {
+        public GraphIterator<Id> getDepthFirstIterator() {
             return SimpleGraph.this.getDepthFirstIterator(this.id);
         }
 
         @Override
-        public Iterator<Id> getBreadthFirstIterator() {
+        public GraphIterator<Id> getBreadthFirstIterator() {
             return SimpleGraph.this.getBreadthFirstIterator(this.id);
         }
 
