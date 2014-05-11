@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Корневой эелемент. Без атрибутов. -->
+<beans>
+    <bean
+        name="eglConfigChooser"
+        scope="singleton"
+        type="by.vsu.mf.simplegles20.core.renderer.EGLConfigChooser" >
+    </bean>
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<loadDefaultEGLConfig>
+    
+    <addConfigParam key="EGL_RED_SIZE" value="5"/>
+    <addConfigParam key="EGL_GREEN_SIZE" value="6"/>
+    <addConfigParam key="EGL_BLUE_SIZE" value="5"/>
+    <addConfigParam key="EGL_RENDERABLE_TYPE" value="4"/>
+    <addConfigParam key="EGL_DEPTH_SIZE" value="8"/>
+    <addConfigParam key="EGL_SAMPLES" value="2"/>
+    <addConfigParam key="EGL_NONE" value="0"/>
+
+    <addConfigParam key="EGL_RED_SIZE" value="8"/>
+    <addConfigParam key="EGL_GREEN_SIZE" value="8"/>
+    <addConfigParam key="EGL_BLUE_SIZE" value="8"/>
+    <addConfigParam key="EGL_RENDERABLE_TYPE" value="4"/>
+    <addConfigParam key="EGL_DEPTH_SIZE" value="8"/>
+    <addConfigParam key="EGL_SAMPLES" value="4"/>
+    <addConfigParam key="EGL_SAMPLE_BUFFERS" value="1"/>
+    <addConfigParam key="EGL_NONE" value="0"/>
+</loadDefaultEGLConfig>    

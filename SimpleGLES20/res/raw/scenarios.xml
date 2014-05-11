@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<processor rootName="loadDefaultEGLConfig" rootId="root">
+
+    <scenario id="addConfigParam">
+        <call bean="eglConfigChooser" method="addConfigParam">
+            <argument type="javax.microedition.khronos.egl.EGL10" constantAttribute="key" typeHint="int"/>
+            <argument type="int" attribute="value"/>
+        </call>
+    </scenario>
+    <tag name="addConfigParam" onOpen="addConfigParam" />
+    
+</processor>
