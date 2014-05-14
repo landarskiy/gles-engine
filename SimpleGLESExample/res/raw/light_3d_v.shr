@@ -1,0 +1,28 @@
+attribute vec4 a_vertex;
+attribute vec3 a_normal;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_MVPMatrix;
+uniform mat4 u_MVMatrix;
+uniform vec3 u_EyePos;
+
+// определяем переменную для передачи координат вершины на интерполяцию
+varying vec3 v_vertex;
+// определяем переменную для передачи нормали вершины на интерполяцию
+varying vec3 v_normal;
+// определяем переменную для передачи цвета вершины на интерполяцию
+varying vec2 v_texcoord;
+
+void main()
+{	
+	//отправляем координаты вершины на интерполяцию
+    v_vertex=a_vertex.xyz;
+    //нормализуем принятый вектор нормали, т.к. он может быть не нормализован 
+    vec3 n_normal=normalize(a_normal);
+    // передаем вектор нормали вершины на интерполяцию
+    v_normal=n_normal;
+    // передаем координату текстуры
+    v_texcoord = a_texcoord;
+    // высчитываем координаты вершины в проекции на экран
+    gl_Position = u_MVPMatrix * a_vertex;
+}

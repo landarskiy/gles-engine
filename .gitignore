@@ -1,1 +1,6 @@
 /MeshLoader/bin
+/MeshLoader/gen
+/SimpleGLES20/gen
+/SimpleGLES20/bin
+/SimpleGLESExample/gen
+/SimpleGLESExample/bin

@@ -1,0 +1,39 @@
+precision mediump float;
+
+uniform sampler2D t_texture1;
+uniform sampler2D t_texture2;
+
+uniform vec3 u_light;
+uniform vec3 u_EyePos;
+
+// определ€ем переменную дл€ передачи координат вершины на интерпол€цию
+varying vec3 v_vertex;
+// определ€ем переменную дл€ передачи нормали вершины на интерпол€цию
+varying vec3 v_normal;
+// определ€ем переменную дл€ передачи цвета вершины на интерпол€цию
+varying vec2 v_texcoord;
+
+void main()
+{
+	//повторно нормализуем нормаль пиксел€, 
+    //т.к. при интерпол€ции нормализаци€ может нарушитьс€
+    vec3 n_normal=normalize(v_normal);
+    //вычисл€ем единичный вектор, указывающий из пиксел€ на источник света
+    vec3 lightvector = normalize(u_light - v_vertex);
+    //вычисл€ем единичный вектор, указывающий из пиксел€ на камеру
+    vec3 lookvector = normalize(u_EyePos - v_vertex);
+    //определ€ем €ркость фонового освещени€
+    float ambient=0.2;
+    //определ€ем коэффициент диффузного освещени€
+    float k_diffuse=6.8;
+    //определ€ем коэффициент зеркального освещени€
+    float k_specular=6.4;
+    //вычисл€ем €ркость диффузного освещени€ пиксел€
+    float diffuse = k_diffuse * max(dot(n_normal, lightvector), 0.0);
+    //вычисл€ем вектор отраженного луча света 
+    vec3 reflectvector = reflect(-lightvector, n_normal);
+    //вычисл€ем €ркость зеркального освещени€ пиксел€
+    float specular = k_specular * pow( max(dot(lookvector,reflectvector),0.0), 2.0 );
+    //вычисл€ем цвет пиксел€
+    gl_FragColor = (ambient+diffuse+specular) * vec4(texture2D(t_texture1, v_texcoord).rgb, 1.0);
+}

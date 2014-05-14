@@ -1,0 +1,10 @@
+attribute vec4 a_vertex;
+attribute vec2 a_texcoord;
+uniform vec2 u_anim;
+varying vec2 v_texcoord;
+
+void main()
+{
+v_texcoord = a_texcoord + u_anim;
+gl_Position = a_vertex;
+}
