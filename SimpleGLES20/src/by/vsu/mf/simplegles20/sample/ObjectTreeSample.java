@@ -16,7 +16,6 @@ public class ObjectTreeSample {
         root.setDirection(direction);
         root.setDirectionUp(directionUp);
         root.setPosition(position);
-        root.updateModelMatrix();
         
         
         ObjectTree tree = new ObjectTree();

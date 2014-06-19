@@ -25,9 +25,9 @@ void main()
     //определ€ем €ркость фонового освещени€
     float ambient=0.2;
     //определ€ем коэффициент диффузного освещени€
-    float k_diffuse=6.8;
+    float k_diffuse=3.8;
     //определ€ем коэффициент зеркального освещени€
-    float k_specular=6.4;
+    float k_specular=4.4;
     //вычисл€ем €ркость диффузного освещени€ пиксел€
     float diffuse = k_diffuse * max(dot(n_normal, lightvector), 0.0);
     //вычисл€ем вектор отраженного луча света 

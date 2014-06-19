@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+
+    <bean
+        name="shaderMetaFactory"
+        type="org.bananaLaba.shaderModel.template.simple.meta.SimpleShaderFactoryLoader">
+
+        <injection method="setUp">
+            <argument>
+                <bean type="java.io.FileInputStream">
+                    <construction>
+                        <argument value="files/test/shaders.xml" />
+                    </construction>
+                </bean>
+            </argument>
+        </injection>
+
+    </bean>
+
+    <bean
+        name="shaderFactory"
+        type="org.bananaLaba.shaderModel.template.simple.SimpleShaderFactory">
+
+        <construction factoryBean="shaderMetaFactory" factoryMethod="create" />
+
+    </bean>
+
+    <bean name="shaderManager" type="org.bananaLaba.sceneGraph.test.helper.ShaderManager">
+        <injection property="factory">
+            <argument beanName="shaderFactory" />
+        </injection>
+    </bean>
+
+    <bean name="bufferObjectManager" type="org.bananaLaba.sceneGraph.test.helper.BufferObjectManager" />
+
+    <bean name="quadRenderer" type="org.bananaLaba.sceneGraph.test.render.QuadRenderer">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+        <injection property="bufferObjectManager">
+            <argument beanName="bufferObjectManager" />
+        </injection>
+    </bean>
+
+    <bean name="pointRenderer" type="org.bananaLaba.sceneGraph.test.render.PointRenderer">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+    </bean>
+
+    <bean name="cubeRenderer" type="org.bananaLaba.sceneGraph.test.render.CubeRenderer">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+    </bean>
+
+    <bean name="canvasListener" type="org.bananaLaba.sceneGraph.test.CubeListener">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+        <injection property="bufferObjectManager">
+            <argument beanName="bufferObjectManager" />
+        </injection>
+        <injection property="quadRenderer">
+            <argument beanName="quadRenderer" />
+        </injection>
+        <injection property="cubeRenderer">
+            <argument beanName="cubeRenderer" />
+        </injection>
+        <injection property="pointRenderer">
+            <argument beanName="pointRenderer" />
+        </injection>
+    </bean>
+
+</beans>

@@ -2,9 +2,9 @@ package by.vsu.mf.simplegles20.core.shader;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import by.vsu.mf.simplegles20.core.util.ObjectPool;
-
 import android.annotation.SuppressLint;
 import android.opengl.GLES20;
 import android.util.Log;
@@ -17,7 +17,7 @@ public class ShaderLoader {
 	
 	@SuppressLint("UseSparseArrays")
 	private ShaderLoader () {
-		this.shaders = new HashMap<Integer, Shader>();
+		this.shaders = new ConcurrentHashMap<Integer, Shader>();
 		this.shaderPool = new ObjectPool<Shader>();
 		for(int i = 0 ; i<shaderPool.getPoolSize() ; i++) {
 			shaderPool.addLast(new Shader());

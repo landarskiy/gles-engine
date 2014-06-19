@@ -29,6 +29,12 @@ import org.slf4j.LoggerFactory;
 // non-constructional dependency in it and this dependency points to a singleton bean.
 // 3) build dependency priority system;
 // 4) build bean life cycle manager system.
+// FIXME: there is an issue which is appears when e.g. we have a bean which has two or more properties which are
+// injected with the same prototype bean. The problem: due to the current instantiation chain the same instance of the
+// prototype bean will be used for all injections of the corresponding type for the dependent bean. The solution:
+// modify dependency tracker to use graph with arches weighted with dependency cardinality and use bean cache which
+// contains stacks for each bean name (necessart instance count for each bean). When a requested to the cache is
+// performed the corresponding stack pops a bean instance and gives it away.
 /**
  * A simple implementation of an IoC-container with basic DI functionality. No bean dependency cycle resolving is
  * supported.

@@ -110,6 +110,20 @@ public final class ConversionUtils {
 
         };
         ConversionUtils.CONVERTERS.put(String.class, converter);
+
+        converter = new Converter<String, Class<?>>() {
+
+            @Override
+            public Class<?> convert(final String value) {
+                try {
+                    return Class.forName(value);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+
+        };
+        ConversionUtils.CONVERTERS.put(Class.class, converter);
     }
 
     private ConversionUtils() {

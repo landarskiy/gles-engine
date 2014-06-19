@@ -3,13 +3,14 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Bootstrap"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/FDP"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/IoC"/>
 	<classpathentry exported="true" kind="lib" path="/IoC/lib/log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="/IoC/lib/slf4j-api-1.7.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="/IoC/lib/slf4j-log4j12-1.7.6.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/SceneGraph"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

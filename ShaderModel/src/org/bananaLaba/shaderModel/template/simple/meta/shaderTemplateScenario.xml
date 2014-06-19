@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<processor rootName="shaderTemplate" rootId="shaderTemplate" rootScenarioId="initialize">
+
+    <!-- ================== Global initialization ================== -->
+    <scenario id="initialize">
+        <store key="builderStack">
+            <argument type="java.util.Stack" />
+        </store>
+        <call resultKey="templateBuilder" bean="prototype" method="getTemplateBuilder" />
+    </scenario>
+
+    <!-- ================== Some shared scenarios ================== -->
+    <scenario id="appendText">
+        <call storeKey="templateBuilder" method="addStaticUnit">
+            <argument attribute="text" />
+        </call>
+    </scenario>
+
+    <scenario id="includeFragment">
+        <call storeKey="templateBuilder" method="addInclusionUnit">
+            <argument attribute="id" />
+        </call>
+    </scenario>
+
+    <scenario id="appendVariable">
+        <call storeKey="templateBuilder" method="addVariableUnit">
+            <argument attribute="id" />
+        </call>
+    </scenario>
+
+    <scenario id="commitTemplate">
+        <call storeKey="templateBuilder" method="commit" />
+        <call resultKey="templateBuilder" storeKey="builderStack" method="pop" />
+    </scenario>
+
+    <!-- ================== Shader tag scenarios ================== -->
+    <scenario id="beginShader">
+        <call storeKey="templateBuilder" method="setId">
+            <argument attribute="id" />
+        </call>
+    </scenario>
+
+    <scenario id="endShader">
+        <call storeKey="templateBuilder" method="commit" />
+        <call storeKey="templateBuilder" method="clearUnits" />
+    </scenario>
+
+    <!-- ================== Fragment tag scenarios ================== -->
+    <scenario id="beginFragment">
+        <call storeKey="builderStack" method="push">
+            <argument storeKey="templateBuilder" />
+        </call>
+        <call resultKey="templateBuilder" bean="prototype" method="getFragmentTemplateBuilder" />
+        <call storeKey="templateBuilder" method="setId">
+            <argument attribute="id" />
+        </call>
+    </scenario>
+
+    <!-- ================== For tag scenarios ================== -->
+    <scenario id="openLoop">
+        <call storeKey="builderStack" method="push">
+            <argument storeKey="templateBuilder" />
+        </call>
+        <call resultKey="templateBuilder" storeKey="templateBuilder" method="addLoopUnit" />
+        <call storeKey="templateBuilder" method="setCounterId" onMissingArguments="skip">
+            <argument attribute="counter" />
+        </call>
+        <call storeKey="templateBuilder" method="setStartValue">
+            <argument attribute="startValue" type="double" />
+        </call>
+        <call storeKey="templateBuilder" method="setStepValue">
+            <argument attribute="step" type="double" />
+        </call>
+        <call storeKey="templateBuilder" method="setCountValue">
+            <argument attribute="count" />
+        </call>
+        <call storeKey="templateBuilder" method="setIntegerCounter" onMissingArguments="skip">
+            <argument attribute="isCounterInteger" type="boolean" />
+        </call>
+    </scenario>
+
+    <!-- ================== Choose tag scenarios ================== -->
+    <scenario id="openChoose">
+        <call storeKey="builderStack" method="push">
+            <argument storeKey="templateBuilder" />
+        </call>
+        <call resultKey="templateBuilder" storeKey="templateBuilder" method="addForkUnit" />
+    </scenario>
+
+    <!-- ================== Default tag scenarios ================== -->
+    <scenario id="openDefault">
+        <call storeKey="builderStack" method="push">
+            <argument storeKey="templateBuilder" />
+        </call>
+        <call resultKey="templateBuilder" storeKey="templateBuilder" method="getDefaultTemplateBuilder" />
+    </scenario>
+
+    <!-- ================== If tag scenarios ================== -->
+    <scenario id="openIf">
+        <call storeKey="builderStack" method="push">
+            <argument storeKey="templateBuilder" />
+        </call>
+        <call resultKey="templateBuilder" storeKey="templateBuilder" method="addBranch">
+            <argument type="org.bananaLaba.shaderModel.template.condition.BooleanFlagCondition">
+                <projection attribute="flag" property="parameterId" />
+            </argument>
+        </call>
+    </scenario>
+
+    <!-- ================== Tag structure ================== -->
+    <tag
+        name="shader"
+        id="shader"
+        onOpen="beginShader"
+        onClose="endShader"
+        onCharacters="appendText"
+        characterAttribute="text">
+
+        <tag name="var" onOpen="appendVariable" />
+        <tag name="include" onOpen="includeFragment" />
+        <tag
+            name="choose"
+            onOpen="openChoose"
+            onClose="commitTemplate">
+
+            <tag
+                name="default"
+                extends="shader"
+                onOpen="openDefault"
+                onCharacters="appendText"
+                characterAttribute="text"
+                onClose="commitTemplate" />
+
+            <tag
+                name="if"
+                extends="shader"
+                onOpen="openIf"
+                onCharacters="appendText"
+                characterAttribute="text"
+                onClose="commitTemplate" />
+
+        </tag>
+        <tag
+            name="for"
+            extends="shader"
+            onOpen="openLoop"
+            onCharacters="appendText"
+            characterAttribute="text"
+            onClose="commitTemplate" />
+
+    </tag>
+    <tag
+        name="fragment"
+        onOpen="beginFragment"
+        onClose="commitTemplate"
+        onCharacters="appendText"
+        characterAttribute="text"
+        extends="shader"/>
+
+</processor>

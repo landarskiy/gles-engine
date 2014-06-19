@@ -16,11 +16,13 @@ varying vec2 v_texcoord;
 void main()
 {	
 	//отправляем координаты вершины на интерполяцию
-    v_vertex=a_vertex.xyz;
+    //v_vertex=a_vertex.xyz;
+    v_vertex=vec3(u_MVMatrix * a_vertex);
     //нормализуем принятый вектор нормали, т.к. он может быть не нормализован 
     vec3 n_normal=normalize(a_normal);
     // передаем вектор нормали вершины на интерполяцию
-    v_normal=n_normal;
+    //v_normal=n_normal;
+    v_normal = vec3(u_MVMatrix * vec4(n_normal, 0.0));
     // передаем координату текстуры
     v_texcoord = a_texcoord;
     // высчитываем координаты вершины в проекции на экран

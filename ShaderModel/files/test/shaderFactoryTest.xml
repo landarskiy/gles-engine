@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<shaderTemplate>
+
+    <fragment id="header">
+        <choose>
+            <if flag="lighting">
+                #define MAX_LIGHTS 8
+                uniform int numLights
+            </if>
+            <default>
+                No lights!
+            </default>
+        </choose>
+        varying vec3 normal
+        varying vec3 eyeVec
+        varying vec3 lightDir[MAX_LIGHTS]
+    </fragment>
+
+    <shader id="vertexShader">
+        <include id="header" />
+        void main() {
+            gl_Position = ftransform();
+            normal = gl_NormalMatrix * gl_Normal;
+            vec4 vVertex = gl_ModelViewMatrix * gl_Vertex;
+            eyeVec = -vVertex.xyz;
+            int i;
+            <for counter="i" startValue="0" count="numLights" step="1" isCounterInteger="true">
+                lightDir[<var id="i"/>] = vec3(gl_LightSource[<var id="i"/>].position.xyz - vVertex.xyz);
+                <choose>
+                    <if flag="test">
+                        Hello!
+                    </if>
+                </choose>
+            </for>
+        }
+    </shader>
+
+    <shader id="fragmentShader">
+        <include id="header" />
+        void main() {
+            vec4 final_color = gl_FrontLightModelProduct.sceneColor;
+            vec3 N = normalize(normal);
+            <choose>
+                <if flag="lighting">
+                    int i;
+                    <for counter="i" startValue="0" count="numLights" step="1" isCounterInteger="true">
+                        vec3 L = normalize(lightDir[<var id="i"/>]);
+                        float lambertTerm = dot(N, L);
+                        if (lambertTerm &gt; 0.0) {
+                            final_color += 
+                                gl_LightSource[<var id="i"/>].diffuse
+                                * gl_FrontMaterial.diffuse
+                                * lambertTerm;  
+                            vec3 E = normalize(eyeVec);
+                            vec3 R = reflect(-L, N);
+                            float specular = pow(max(dot(R, E), 0.0), gl_FrontMaterial.shininess);
+                            final_color += gl_LightSource[<var id="i"/>].specular * gl_FrontMaterial.specular * specular;
+                        }
+                    </for>
+                </if>
+                <default>
+                    final_color += gl_FrontMaterial.diffuse;
+                </default>
+            </choose>
+            gl_FragColor = final_color;
+        }
+    </shader>
+
+</shaderTemplate>

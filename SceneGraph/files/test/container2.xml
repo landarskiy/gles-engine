@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+
+    <!-- OpenGL API's -->
+    <bean name="drawAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2DrawAPI" />
+    <bean name="vertexAttributeAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2VertexAttributeAPI" />
+    <bean name="transformationAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2TransformationAPI">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+    </bean>
+    <bean name="blendingAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2BlendingAPI" />
+    <bean name="flagAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2FlagAPI" />
+    <bean name="compilerAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2ShaderCompilerAPI" />
+    <bean name="bufferAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2BufferAPI" />
+
+    <!-- Renderers and rendering aspect applicators -->
+    <bean name="abstractRenderer" category="template">
+        <injection property="drawAPI">
+            <argument beanName="drawAPI" />
+        </injection>
+        <injection property="vertexAttributeAPI">
+            <argument beanName="vertexAttributeAPI" />
+        </injection>
+        <injection property="transformationAPI">
+            <argument beanName="transformationAPI" />
+        </injection>
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+        <injection property="renderingAspectApplicator">
+            <argument beanName="aspectApplicator" />
+        </injection>
+    </bean>
+
+    <bean name="VBORenderer" type="by.vsu.mf.rendering.opengl.VBOOpenGLRenderer" parent="abstractRenderer"
+            scope="prototype">
+        <injection property="bufferAPI">
+            <argument beanName="bufferAPI" />
+        </injection>
+    </bean>
+
+    <bean name="VBORenderer2" type="by.vsu.mf.rendering.opengl.VBOOpenGLRenderer" parent="abstractRenderer"
+            scope="prototype">
+        <injection property="bufferAPI">
+            <argument beanName="bufferAPI" />
+        </injection>
+    </bean>
+
+    <bean name="aspectApplicator" type="by.vsu.mf.rendering.opengl.CompositeRenderingAspectApplicator">
+        <injection method="addApplicator">
+            <argument type="class" value="by.vsu.mf.rendering.opengl.renderingAspect.Blending" />
+            <argument>
+                <bean type="by.vsu.mf.rendering.opengl.renderingAspect.BlendingApplicator">
+                    <injection property="blendingAPI">
+                        <argument beanName="blendingAPI" />
+                    </injection>
+                </bean>
+            </argument>
+        </injection>
+        <injection method="addApplicator">
+            <argument type="class" value="by.vsu.mf.rendering.opengl.renderingAspect.Flag" />
+            <argument>
+                <bean type="by.vsu.mf.rendering.opengl.renderingAspect.FlagApplicator">
+                    <injection property="flagAPI">
+                        <argument beanName="flagAPI" />
+                    </injection>
+                </bean>
+            </argument>
+        </injection>
+    </bean>
+
+    <!-- Shader management beans -->
+    <bean
+        name="shaderMetaFactory"
+        type="org.bananaLaba.shaderModel.template.simple.meta.SimpleShaderFactoryLoader">
+
+        <injection method="setUp">
+            <argument>
+                <bean type="java.io.FileInputStream">
+                    <construction>
+                        <argument value="files/test/demoShaders.xml" />
+                    </construction>
+                </bean>
+            </argument>
+        </injection>
+
+    </bean>
+
+    <bean
+        name="shaderFactory"
+        type="org.bananaLaba.shaderModel.template.simple.SimpleShaderFactory">
+
+        <construction factoryBean="shaderMetaFactory" factoryMethod="create" />
+
+    </bean>
+
+    <bean name="shaderManager" type="by.vsu.mf.rendering.opengl.shader.ShaderManager">
+        <injection property="factory">
+            <argument beanName="shaderFactory" />
+        </injection>
+        <injection property="compilerAPI">
+            <argument beanName="compilerAPI" />
+        </injection>
+    </bean>
+
+    <!-- Helpers -->
+    <bean name="contextDistributor" type="by.vsu.mf.rendering.jogl.gl2.api.GL2ContextDistributor">
+        <injection method="registerAPI">
+            <argument beanName="drawAPI" />
+        </injection>
+        <injection method="registerAPI">
+            <argument beanName="vertexAttributeAPI" />
+        </injection>
+        <injection method="registerAPI">
+            <argument beanName="blendingAPI" />
+        </injection>
+        <injection method="registerAPI">
+            <argument beanName="flagAPI" />
+        </injection>
+        <injection method="registerAPI">
+            <argument beanName="compilerAPI" />
+        </injection>
+        <injection method="registerAPI">
+            <argument beanName="bufferAPI" />
+        </injection>
+    </bean>
+
+    <!-- Graphics engine -->
+    <bean name="canvasListener" type="org.bananaLaba.sceneGraph.test.GraphicsEngine">
+        <injection property="contextDistributor">
+            <argument beanName="contextDistributor" />
+        </injection>
+        <injection property="renderer">
+            <argument beanName="VBORenderer" />
+        </injection>
+        <injection property="blurRenderer">
+            <argument beanName="VBORenderer2" />
+        </injection>
+    </bean>
+
+</beans>

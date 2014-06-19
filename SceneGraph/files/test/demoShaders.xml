@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<shaderTemplate>
+
+    <shader id="testVertexShader">
+        #version 120
+
+        uniform mat4 u_MVPMatrix;
+        uniform mat4 u_MVMatrix;
+        uniform vec3 u_LightPos;
+
+        attribute vec4 a_Position;
+        attribute vec3 a_Normal;
+        attribute vec2 a_Texture;
+
+        varying vec4 v_Color;
+        varying vec2 v_Text_Coord;
+
+        void main() {
+            vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
+            vec3 modelViewNormal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));
+            float distance = length(u_LightPos - modelViewVertex);
+            vec3 lightVector = normalize(u_LightPos - modelViewVertex);
+            float diffuse = max(dot(modelViewNormal, lightVector), 0.1);
+            diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));
+            v_Color = vec4(1.0, 1.0, 0.0, 1.0) * diffuse * 5;
+            v_Text_Coord = a_Texture;
+            gl_Position = u_MVPMatrix * a_Position;
+        }
+    </shader>
+    
+    <shader id="testFragmentShader">
+        #version 120
+
+        //precision mediump float;
+
+        varying vec4 v_Color;
+        varying vec2 v_Text_Coord;
+
+        void main() {
+            gl_FragColor = v_Color;
+        }
+    </shader>
+
+    <shader id="simpleVertexShader">
+        #version 120
+
+        uniform mat4 u_MVPMatrix;
+        uniform mat4 u_MVMatrix;
+        uniform vec3 u_LightPos;
+
+        attribute vec4 a_Position;
+        attribute vec4 a_Color;
+        attribute vec3 a_Normal;
+
+        varying vec4 v_Color;
+
+        void main() {
+            vec3 modelViewVertex = vec3(u_MVMatrix * a_Position);
+            vec3 modelViewNormal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));
+            float distance = length(u_LightPos - modelViewVertex);
+            vec3 lightVector = normalize(u_LightPos - modelViewVertex);
+            float diffuse = max(dot(modelViewNormal, lightVector), 0.1);
+            diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));
+            v_Color = a_Color * diffuse * 5;
+            gl_Position = u_MVPMatrix * a_Position;
+        }
+    </shader>
+
+    <shader id="simpleFragmentShader">
+        #version 120
+
+        //precision mediump float;
+
+        varying vec4 v_Color;
+
+        void main() {
+            gl_FragColor = v_Color;
+        }
+    </shader>
+
+    <shader id="pointVertexShader">
+        #version 120
+
+        uniform mat4 u_MVPMatrix;
+        attribute vec4 a_Position;
+
+        void main() {
+            gl_Position = u_MVPMatrix * a_Position;
+            gl_PointSize = 5.0;
+        }
+    </shader>
+
+    <shader id="pointFragmentShader">
+        #version 120
+
+        //precision mediump float;
+
+        void main() {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+    </shader>
+
+    <shader id="quadVertexShader">
+        #version 120
+
+        //precision mediump float;
+
+        attribute vec4 a_Position;
+        attribute vec4 a_TexCoord0;
+
+        varying vec4 v_TexCoord0;
+
+        void main() {
+            gl_Position = a_Position;
+            v_TexCoord0 = a_TexCoord0;
+        }
+    </shader>
+
+    <shader id="quadFragmentShader">
+        #version 120
+
+        //precision mediump float;
+
+        uniform sampler2D u_Texture0;
+        varying vec4 v_TexCoord0;
+
+        void main() {
+            gl_FragColor = texture2D(u_Texture0, v_TexCoord0.xy);
+        }
+    </shader>
+
+    <shader id="gaussVertexShader">
+        #version 120
+
+        //precision mediump float;
+
+        attribute vec4 a_Position;
+        attribute vec4 a_TexCoord0;
+
+        uniform vec4 uTexOffset0;
+        uniform vec4 uTexOffset1;
+        uniform vec4 uTexOffset2;
+        uniform vec4 uTexOffset3;
+
+        varying vec4 TexCoord0;
+        varying vec4 TexCoord1;
+        varying vec4 TexCoord2;
+        varying vec4 TexCoord3;
+
+        void main() {
+            gl_Position = a_Position;
+            TexCoord0 = a_TexCoord0 + uTexOffset0;
+            TexCoord1 = a_TexCoord0 + uTexOffset1;
+            TexCoord2 = a_TexCoord0 + uTexOffset2;
+            TexCoord3 = a_TexCoord0 + uTexOffset3;
+        }
+    </shader>
+
+    <shader id="gaussFragmentShader">
+        #version 120
+
+        //precision mediump float;
+
+        uniform sampler2D uTexture0;
+        uniform vec4 uTexCoef0;
+        uniform vec4 uTexCoef1;
+        uniform vec4 uTexCoef2;
+        uniform vec4 uTexCoef3;
+
+        varying vec4 TexCoord0;
+        varying vec4 TexCoord1;
+        varying vec4 TexCoord2;
+        varying vec4 TexCoord3;
+
+        void main() {
+            vec4 c0 = texture2D(uTexture0, TexCoord0.xy);
+            vec4 c1 = texture2D(uTexture0, TexCoord1.xy);
+            vec4 c2 = texture2D(uTexture0, TexCoord2.xy);
+            vec4 c3 = texture2D(uTexture0, TexCoord3.xy);
+            gl_FragColor = uTexCoef0 * c0 + uTexCoef1 * c1 + uTexCoef2 * c2 + uTexCoef3 * c3;
+
+            float tripleBrightness = gl_FragColor.x + gl_FragColor.y + gl_FragColor.z;
+            if (tripleBrightness &lt; 0.08) {
+                discard;
+            }
+        }
+    </shader>
+
+</shaderTemplate>

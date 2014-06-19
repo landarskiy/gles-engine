@@ -15,6 +15,7 @@ public final class TypeHintUtils {
         TypeHintUtils.PRIMITIVE_TYPES.put("short", short.class);
         TypeHintUtils.PRIMITIVE_TYPES.put("byte", byte.class);
         TypeHintUtils.PRIMITIVE_TYPES.put("boolean", boolean.class);
+        TypeHintUtils.PRIMITIVE_TYPES.put("class", Class.class);
     }
 
     private TypeHintUtils() {

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+
+    <!-- OpenGL API's -->
+    <bean name="drawAPI" type="by.vsu.mf.rendering.fake.api.FakeDrawAPI" />
+    <bean name="vertexAttributeAPI" type="by.vsu.mf.rendering.fake.api.FakeVertexAttributeAPI" />
+    <bean name="transformationAPI" type="by.vsu.mf.rendering.jogl.gl2.api.GL2TransformationAPI">
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+    </bean>
+    <bean name="blendingAPI" type="by.vsu.mf.rendering.fake.api.FakeBlendingAPI" />
+    <bean name="flagAPI" type="by.vsu.mf.rendering.fake.api.FakeFlagAPI" />
+    <bean name="compilerAPI" type="by.vsu.mf.rendering.fake.api.FakeShaderCompilerAPI" />
+    <bean name="bufferAPI" type="by.vsu.mf.rendering.fake.api.FakeBufferAPI" />
+
+    <!-- Vertex models -->
+    <bean name="fullScreenQuadVertexModel" type="by.vsu.mf.rendering.object.VertexDataModel">
+        <injection method="addAttribute">
+            <argument>
+                <bean type="by.vsu.mf.rendering.object.VertexAttribute">
+                    <construction>
+                        <argument value="a_Position" />
+                        <argument type="int" value="3" />
+                        <argument type="int" value="0" />
+                    </construction>
+                </bean>
+            </argument>
+        </injection>
+        <injection method="addAttribute">
+            <argument>
+                <bean type="by.vsu.mf.rendering.object.VertexAttribute">
+                    <construction>
+                        <argument value="a_TexCoord0" />
+                        <argument type="int" value="2" />
+                        <argument type="int" value="12" />
+                    </construction>
+                </bean>
+            </argument>
+        </injection>
+        <injection property="stride">
+            <argument type="int" value="20" />
+        </injection>
+        <injection property="type">
+            <argument type="by.vsu.mf.rendering.object.VertexDataType" value="FLOAT" />
+        </injection>
+    </bean>
+
+    <!-- Renderers and rendering aspect applicators -->
+    <bean name="abstractRenderer" category="template">
+        <injection property="drawAPI">
+            <argument beanName="drawAPI" />
+        </injection>
+        <injection property="vertexAttributeAPI">
+            <argument beanName="vertexAttributeAPI" />
+        </injection>
+        <injection property="transformationAPI">
+            <argument beanName="transformationAPI" />
+        </injection>
+        <injection property="shaderManager">
+            <argument beanName="shaderManager" />
+        </injection>
+        <injection property="renderingAspectApplicator">
+            <argument beanName="aspectApplicator" />
+        </injection>
+        <injection method="setVertexDataModel">
+            <argument beanName="fullScreenQuadVertexModel" />
+        </injection>
+    </bean>
+
+    <bean name="simpleRenderer" type="by.vsu.mf.rendering.opengl.SimpleOpenGLRenderer" parent="abstractRenderer" />
+    <bean name="VBORenderer" type="by.vsu.mf.rendering.opengl.VBOOpenGLRenderer" parent="abstractRenderer" >
+        <injection property="bufferAPI">
+            <argument beanName="bufferAPI" />
+        </injection>
+    </bean>
+
+    <bean name="aspectApplicator" type="by.vsu.mf.rendering.opengl.CompositeRenderingAspectApplicator">
+        <injection method="addApplicator">
+            <argument type="class" value="by.vsu.mf.rendering.opengl.renderingAspect.Blending" />
+            <argument>
+                <bean type="by.vsu.mf.rendering.opengl.renderingAspect.BlendingApplicator">
+                    <injection property="blendingAPI">
+                        <argument beanName="blendingAPI" />
+                    </injection>
+                </bean>
+            </argument>
+        </injection>
+        <injection method="addApplicator">
+            <argument type="class" value="by.vsu.mf.rendering.opengl.renderingAspect.Flag" />
+            <argument>
+                <bean type="by.vsu.mf.rendering.opengl.renderingAspect.FlagApplicator">
+                    <injection property="flagAPI">
+                        <argument beanName="flagAPI" />
+                    </injection>
+                </bean>
+            </argument>
+        </injection>
+    </bean>
+
+    <!-- Shader management beans -->
+    <bean
+        name="shaderMetaFactory"
+        type="org.bananaLaba.shaderModel.template.simple.meta.SimpleShaderFactoryLoader">
+
+        <injection method="setUp">
+            <argument>
+                <bean type="java.io.FileInputStream">
+                    <construction>
+                        <argument value="files/test/shaders.xml" />
+                    </construction>
+                </bean>
+            </argument>
+        </injection>
+
+    </bean>
+
+    <bean
+        name="shaderFactory"
+        type="org.bananaLaba.shaderModel.template.simple.SimpleShaderFactory">
+
+        <construction factoryBean="shaderMetaFactory" factoryMethod="create" />
+
+    </bean>
+
+    <bean name="shaderManager" type="by.vsu.mf.rendering.opengl.shader.ShaderManager">
+        <injection property="factory">
+            <argument beanName="shaderFactory" />
+        </injection>
+        <injection property="compilerAPI">
+            <argument beanName="compilerAPI" />
+        </injection>
+    </bean>
+
+</beans>

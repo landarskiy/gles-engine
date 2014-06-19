@@ -99,7 +99,7 @@ public class Renderer implements GLSurfaceView.Renderer{
 		
 		Point3D position = new Point3D(0, 0, 4);
 		Point3D direct = new Point3D(0, 0, 0);
-		Point3D directUp = new Point3D(0, 1.0f,0);
+		Point3D directUp = new Point3D(0, 1,0);
 		
 		camera.setLookAt(position, direct, directUp);
 		camera.calculateProjectViewMatrix();
@@ -337,8 +337,16 @@ public class Renderer implements GLSurfaceView.Renderer{
 			//camera.rotate(angleY, 1f, 0, 0);
 			
 	        Matrix.setIdentityM(transformation, 0);
+	        float xK = 1f;
+	        float zK = 1f;
+	        if(Math.abs(srcCameraPosition.x) > Math.abs(srcCameraPosition.z)) {
+	        	zK = 0;
+	        } else {
+	        	xK = 0;
+	        }
 	        Matrix.rotateM(transformation, 0, angleX, 0, 1f, 0);
-	        Matrix.rotateM(transformation, 0, angleY, 1f, 0, 0);
+	        Matrix.rotateM(transformation, 0, angleY, 0.5f, 0, 0);
+	        Matrix.rotateM(transformation, 0, angleY, 0, 0, 0.5f);
 	        Point3D pCamera = new Point3D(srcCameraPosition.x, srcCameraPosition.y, srcCameraPosition.z);
 	        Point3D pCameraDirection = new Point3D(srcCameraDirection.x, srcCameraDirection.y, srcCameraDirection.z);
 	        float multiplePoint[] = pCamera.toGomogenFloatArray();
