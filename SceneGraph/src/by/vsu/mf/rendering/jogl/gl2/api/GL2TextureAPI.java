@@ -49,11 +49,15 @@ public class GL2TextureAPI extends GL2API implements TextureAPI {
         this.gl.glBindTexture(GL.GL_TEXTURE_2D, 0);        
     }
 
+    //XXX Массив data - обычный byte array файла текстуры.
     @Override
 	public void createTexture(final String name, final byte[] data) {
     	prepare(name);
     	try {
 			BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
+			//Этот момент не проверял. Идея в следующем - вытащить байты данных
+			//т.к. в сам метод приходит массив байт файла, соответственно там хранится много лишней информации,
+			//которую нужно отделить от полезных данных
 			DataBufferByte imageData = (DataBufferByte) img.getRaster().getDataBuffer();			
 			IntBuffer textureBuffer =
 					ByteBuffer.wrap(imageData.getData()).asIntBuffer();
